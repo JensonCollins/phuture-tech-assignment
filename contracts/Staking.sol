@@ -35,7 +35,9 @@ contract Staking {
 
     function unstake(uint _amount) external {
         uint deposited = stakedBalance[msg.sender]; // deposited = stake[address];
+        uint balance = stakingToken.balanceOf(address(this));
         require(_amount <= deposited, "Withdraw amount is invalid");
+        require(_amount <= balance, "Withdraw amount is invalid");
         uint reward = deposited * (lastRewardRate - rewardRate[msg.sender]) / DIVISION; // reward = deposited * (S - S0[address]);
         stakingToken.transfer(msg.sender, _amount + reward);
         rewardRate[msg.sender] = lastRewardRate;
